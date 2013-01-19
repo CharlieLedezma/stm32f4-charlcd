@@ -1,0 +1,25 @@
+* (preliminary) Pinout *
+
+LCD     Function      STM32F4
+1       Ground        -------
+2       VCC           -------
+3       Contrast      -(pot)- [may use GPIOD 6 at a later date]
+4       RS            GPIOD 7
+5       R/W           GPIOD 8
+6       Clock(enable) GPIOD 9
+7       Bit 0         GPIOE 4
+8       Bit 1         GPIOE 5
+9       Bit 2         GPIOE 6
+10      Bit 3         GPIOE 7
+11      Bit 4         GPIOE 8
+12      Bit 5         GPIOE 9
+13      Bit 6         GPIOE10
+14      Bit 7         GPIOE11
+15      Backlight(+)  GPIOD10 [potentially]
+16      Backlight(-)  -------
+
+
+--untested/I don't know if this works:--
+[[ example to write 8 bits of data:                ]]
+[[ GPIOE->ODR=((GPIOE->ODR&0x0FF0) | (data << 4)); ]]
+--hope that works :D--
