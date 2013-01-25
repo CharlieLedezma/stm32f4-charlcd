@@ -2,8 +2,13 @@
  * See pinout.txt in the root directory of this project for the
  * LCD pinout.
  */
+
 #ifndef __CHARLCD_H__
 #define __CHARLCD_H__
+
+// Device Defines (set these for your device!)
+#define Num_Lines 4
+#define Num_Characters 20  // Per line
 
 #define Set_RS GPIO_SetBits(GPIOD,GPIO_Pin_7)
 #define Clr_RS GPIO_ResetBits(GPIOD,GPIO_Pin_8)
