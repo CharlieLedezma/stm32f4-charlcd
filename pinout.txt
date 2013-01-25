@@ -21,5 +21,5 @@ LCD     Function      STM32F4
 
 --untested/I don't know if this works:--
 [[ example to write 8 bits of data:                ]]
-[[ GPIOE->ODR=((GPIOE->ODR&0x0FF0) | (data << 4)); ]]
+[[ GPIOE->ODR=((GPIOE->ODR&0xF00F) | (data << 4)); ]]
 --hope that works :D--
