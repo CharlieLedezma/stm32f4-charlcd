@@ -2,6 +2,7 @@ include ../Makefile.common
 
 OBJS+=startup_stm32f4xx.o
 OBJS+=main.o
+OBJS+=charlcd.o
 
 all: src
 

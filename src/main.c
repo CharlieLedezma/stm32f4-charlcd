@@ -1,20 +1,21 @@
-/**
- * STM32F4 Template file by: Tom McLeod
+/*
+ * main.c
  *
- * Borrowed heavily from the IO example provided by ST.
+ * STM32F4 Character LCD demo, by: Tom McLeod
  *
- * This code will blink the 4 LED's on the STM32F4Discovery board repeatedly.
+ * This code is used to test a character LCD interface with the STM32F4.
  *
  * If you end up using this code please let me know!
  *
- * That said, this isn't licensed, so feel free to do what you want :P.
+ * THIS CODE IS PROVIDED AS IS, WITH NO WARRANTY. Please see the LICENSE file 
+ * in the projects root directory for more info.
  *
- * THIS CODE IS PROVIDED AS IS, WITH NO WARRANTY.
- **/ 
+ */ 
 
 #include "stm32f4xx.h"
 #include "stm32f4xx_gpio.h"
 #include "stm32f4xx_rcc.h"
+#include "charlcd.h"
 
 GPIO_InitTypeDef  GPIO_InitStructure;
 
@@ -35,6 +36,10 @@ int main(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOD, &GPIO_InitStructure);
+
+	CharLCD_Config();
+	CharLCD_Init();
+	CharLCD_Clear();
 
 	// Enable FPU :D
 	// Not really used in this case, but doesn't hurt and proves that it works to 
