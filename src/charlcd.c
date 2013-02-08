@@ -26,10 +26,11 @@ void CharLCD_Config(void)
 
 	// Configure the LCD pins for push-pull output
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_Init(GPIOB,&GPIO_InitStructure);
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+	GPIO_Init(GPIOE,&GPIO_InitStructure);
 
 	// Control pins
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9;
@@ -42,24 +43,75 @@ void CharLCD_Init(void)
 	Clr_RW;
 	Clr_Clk;
 
-	// Turn display on, with cursor on and blinking
-	CharLCD_WriteData(0x0F);
+	Set_Clk;
 
-	CharLCD_Delay(3000);
+	CharLCD_Delay(0xFFFFF);			// Long delay to see if it helps
+
+	// Turn display on, with cursor on and blinking
+	//CharLCD_WriteData(0x0F);
+	GPIO_SetBits(GPIOE,GPIO_Pin_4);		// Writing out explicitly to see if it works
+	GPIO_SetBits(GPIOE,GPIO_Pin_5);
+	GPIO_SetBits(GPIOE,GPIO_Pin_6);
+	GPIO_SetBits(GPIOE,GPIO_Pin_7);
+
+	CharLCD_Delay(0xFFFFF);			// Long delay to see if it helps
+
+	Clr_Clk;
+
+	CharLCD_Delay(0xFFFFF);
+
+	GPIO_ResetBits(GPIOE,GPIO_Pin_4);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_5);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_6);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_7);
+
+	Set_Clk;
+
+	CharLCD_Delay(0xFFFFF);
 
 	// 8-bit, 2-line (4-line displays use 2-line with more characters
 	// per line), 5x11 dot font.
-	CharLCD_WriteData(0x3C);
+	//CharLCD_WriteData(0x3C);
+	GPIO_SetBits(GPIOE,GPIO_Pin_9);
+	GPIO_SetBits(GPIOE,GPIO_Pin_8);
+	GPIO_SetBits(GPIOE,GPIO_Pin_7);
+	GPIO_SetBits(GPIOE,GPIO_Pin_6);
 
-	CharLCD_Delay(3000);
+	CharLCD_Delay(0xFFFFF);
+
+	Clr_Clk;
+
+	CharLCD_Delay(0xFFFFF);
+
+	GPIO_ResetBits(GPIOE,GPIO_Pin_9);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_8);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_7);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_6);
 
 	// increment left, no screen shift
-	CharLCD_WriteData(0x06);
+	//CharLCD_WriteData(0x06);
+	Set_Clk;
 
-	CharLCD_Delay(3000);
+	CharLCD_Delay(0xFFFFF);
+
+	GPIO_SetBits(GPIOE,GPIO_Pin_4);
+
+	CharLCD_Delay(0xFFFFF);
+
+	Clr_Clk;
+
+	CharLCD_Delay(0xFFFFF);
+
+	GPIO_ResetBits(GPIOE,GPIO_Pin_4);
+
+	/*Set_Clk;
+
+	CharLCD_Delay(0xFFFFFF);
+
+	Clr_Clk;*/
 
 	// Clear the pins (just in case)
-	CharLCD_WriteData(0x00);
+	//CharLCD_WriteData(0x00);
 }
 
 /*
@@ -96,9 +148,11 @@ void CharLCD_Clear(void)
 	CharLCD_WriteData(0x01);
 }
 
-void CharLCD_Delay(u32 Count)
+void CharLCD_Delay(int Count)
 {
-	for(;Count != 0;Count--);
+	while(Count--)
+	{
+	}
 }
 
 void CharLCD_Test(void)

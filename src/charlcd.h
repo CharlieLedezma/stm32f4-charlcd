@@ -28,7 +28,7 @@ void CharLCD_Init(void);
 void CharLCD_WriteRegister(u16 index,u16 data);
 void CharLCD_SetCursor(u16 line,u16 column);
 void CharLCD_Clear(void);
-void CharLCD_Delay(u32 Count);
+void CharLCD_Delay(int Count);
 void CharLCD_Test(void);
 void CharLCD_WriteData(u16 data);
 void CharLCD_WriteIndex(u16 index);

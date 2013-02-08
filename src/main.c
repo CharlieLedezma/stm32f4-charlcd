@@ -39,7 +39,7 @@ int main(void)
 
 	CharLCD_Config();
 	CharLCD_Init();
-	CharLCD_Clear();
+	//CharLCD_Clear();
 
 	// Enable FPU :D
 	// Not really used in this case, but doesn't hurt and proves that it works to 
