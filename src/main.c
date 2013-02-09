@@ -34,7 +34,6 @@ int main(void)
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
   GPIO_Init(GPIOD, &GPIO_InitStructure);
 
 	CharLCD_Config();
@@ -48,25 +47,25 @@ int main(void)
 
   while (1)
   {
-    GPIO_SetBits(GPIOD,GPIO_Pin_12);	// Turn on green
+		GPIO_SetBits(GPIOD,GPIO_Pin_12);	// Turn on green
     
-		delay(0xFFFFF);
-    
-    GPIO_SetBits(GPIOD,GPIO_Pin_13);	// Turn on orange
-    
-		delay(0xFFFFF);
-  
-    GPIO_SetBits(GPIOD,GPIO_Pin_14);	// Turn on red
-
-		delay(0xFFFFF);
-    
-    GPIO_SetBits(GPIOD,GPIO_Pin_15);	// Turn on blue
-    
-		delay(0xFFFFF);
-
+		delay(0xFFFFF); 
+		
+		GPIO_SetBits(GPIOD,GPIO_Pin_13);	// Turn on orange 
+		
+		delay(0xFFFFF); 
+		
+		GPIO_SetBits(GPIOD,GPIO_Pin_14);	// Turn on red 
+		
+		delay(0xFFFFF); 
+		
+		GPIO_SetBits(GPIOD,GPIO_Pin_15);	// Turn on blue 
+		
+		delay(0xFFFFF); 
+		
 		// Turn all off
-    GPIO_ResetBits(GPIOD,GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15);
-    
+		GPIO_ResetBits(GPIOD,GPIO_Pin_12|GPIO_Pin_13|GPIO_Pin_14|GPIO_Pin_15); 
+		
 		delay(0xFFFFF);
   }
 }

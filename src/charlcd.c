@@ -21,7 +21,7 @@ void CharLCD_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 
-	// Open the clock we want
+	// Open the clocks we want
 	RCC_APB2PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE,ENABLE);
 
 	// Configure the LCD pins for push-pull output
@@ -29,7 +29,6 @@ void CharLCD_Config(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
 	GPIO_Init(GPIOE,&GPIO_InitStructure);
 
 	// Control pins
@@ -39,6 +38,12 @@ void CharLCD_Config(void)
 
 void CharLCD_Init(void)
 {
+	Set_RS;
+	Set_RW;
+	Set_Clk;
+
+	CharLCD_Delay(0xFFFFFF);
+
 	Clr_RS;
 	Clr_RW;
 	Clr_Clk;
@@ -47,71 +52,52 @@ void CharLCD_Init(void)
 
 	CharLCD_Delay(0xFFFFF);			// Long delay to see if it helps
 
-	// Turn display on, with cursor on and blinking
-	//CharLCD_WriteData(0x0F);
-	GPIO_SetBits(GPIOE,GPIO_Pin_4);		// Writing out explicitly to see if it works
-	GPIO_SetBits(GPIOE,GPIO_Pin_5);
-	GPIO_SetBits(GPIOE,GPIO_Pin_6);
-	GPIO_SetBits(GPIOE,GPIO_Pin_7);
+	// 8-bit, 2-line (4-line displays use 2-line with more characters
+	// per line)
+	CharLCD_WriteData(0x38);
 
-	CharLCD_Delay(0xFFFFF);			// Long delay to see if it helps
+	CharLCD_Delay(0xFFFFFF);			// Long delay to see if it helps
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFFFF);
-
-	GPIO_ResetBits(GPIOE,GPIO_Pin_4);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_5);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_6);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_7);
+	CharLCD_Delay(0xFFFFFF);
 
 	Set_Clk;
 
 	CharLCD_Delay(0xFFFFF);
 
-	// 8-bit, 2-line (4-line displays use 2-line with more characters
-	// per line), 5x11 dot font.
-	//CharLCD_WriteData(0x3C);
-	GPIO_SetBits(GPIOE,GPIO_Pin_9);
-	GPIO_SetBits(GPIOE,GPIO_Pin_8);
-	GPIO_SetBits(GPIOE,GPIO_Pin_7);
-	GPIO_SetBits(GPIOE,GPIO_Pin_6);
+	// increment left, no screen shift
+	CharLCD_WriteData(0x06);
 
-	CharLCD_Delay(0xFFFFF);
+	CharLCD_Delay(0xFFFFFF);
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFFFF);
+	// Turn display on, with cursor on and blinking
+	CharLCD_WriteData(0x0F);
 
-	GPIO_ResetBits(GPIOE,GPIO_Pin_9);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_8);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_7);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_6);
-
-	// increment left, no screen shift
-	//CharLCD_WriteData(0x06);
 	Set_Clk;
 
 	CharLCD_Delay(0xFFFFF);
 
 	GPIO_SetBits(GPIOE,GPIO_Pin_4);
 
-	CharLCD_Delay(0xFFFFF);
+	CharLCD_Delay(0xFFFFFF);
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFFFF);
+	CharLCD_Delay(0xFFFFFF);
 
 	GPIO_ResetBits(GPIOE,GPIO_Pin_4);
 
-	/*Set_Clk;
+	Set_Clk;
 
 	CharLCD_Delay(0xFFFFFF);
 
-	Clr_Clk;*/
+	Clr_Clk;
 
 	// Clear the pins (just in case)
-	//CharLCD_WriteData(0x00);
+	CharLCD_WriteData(0x00);
 }
 
 /*

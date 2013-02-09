@@ -11,7 +11,7 @@
 #define Num_Characters 20  // Per line
 
 #define Set_RS GPIO_SetBits(GPIOD,GPIO_Pin_7)
-#define Clr_RS GPIO_ResetBits(GPIOD,GPIO_Pin_8)
+#define Clr_RS GPIO_ResetBits(GPIOD,GPIO_Pin_7)
 
 #define Set_RW GPIO_SetBits(GPIOD,GPIO_Pin_8)
 #define Clr_RW GPIO_ResetBits(GPIOD,GPIO_Pin_8)
