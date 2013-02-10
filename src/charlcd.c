@@ -38,7 +38,7 @@ void CharLCD_Config(void)
 
 void CharLCD_Init(void)
 {
-	CharLCD_WriteData(0x00);
+	CharLCD_WriteData(0xFF);
 	Set_RS;
 	Set_RW;
 	Set_Clk;
@@ -109,6 +109,8 @@ void CharLCD_WriteData(u8 data)
 {
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F) | (data << 4));
 
+	GPIOD->ODR=((GPIOD->ODR & 0x7FFF) | (0x8000));
+
 	Set_Clk;
 
 	CharLCD_Delay(0xFFFFFF);
@@ -116,6 +118,8 @@ void CharLCD_WriteData(u8 data)
 	Clr_Clk;
 
 	CharLCD_Delay(0xFFFFFF);
+
+	GPIOD->ODR=((GPIOD->ODR & 0x7FFF));
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
 }
