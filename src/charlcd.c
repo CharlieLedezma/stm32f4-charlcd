@@ -22,7 +22,7 @@ void CharLCD_Config(void)
 	GPIO_InitTypeDef GPIO_InitStructure;
 
 	// Open the clocks we want
-	RCC_APB2PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE,ENABLE);
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD | RCC_AHB1Periph_GPIOE,ENABLE);
 
 	// Configure the LCD pins for push-pull output
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10 | GPIO_Pin_11;
@@ -38,12 +38,12 @@ void CharLCD_Config(void)
 
 void CharLCD_Init(void)
 {
-	CharLCD_WriteData(0xFF);
+	CharLCD_WriteData(0x00);
 	Set_RS;
 	Set_RW;
 	Set_Clk;
 
-	CharLCD_Delay(0xFFFFFF);
+	CharLCD_Delay(0xFFFFF);
 
 	Clr_RS;
 	Clr_RW;
@@ -109,17 +109,13 @@ void CharLCD_WriteData(u8 data)
 {
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F) | (data << 4));
 
-	GPIOD->ODR=((GPIOD->ODR & 0x7FFF) | (0x8000));
-
 	Set_Clk;
 
-	CharLCD_Delay(0xFFFFFF);
+	CharLCD_Delay(0xFFFFF);
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFFFFF);
-
-	GPIOD->ODR=((GPIOD->ODR & 0x7FFF));
+	CharLCD_Delay(0xFFFFF);
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
 }
