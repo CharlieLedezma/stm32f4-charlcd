@@ -25,16 +25,16 @@
 
 void CharLCD_Config(void);
 void CharLCD_Init(void);
-void CharLCD_WriteRegister(u16 index,u16 data);
-void CharLCD_SetCursor(u16 line,u16 column);
+void CharLCD_WriteRegister(u8 index,u8 data);
+void CharLCD_SetCursor(u8 line,u8 column);
 void CharLCD_Clear(void);
 void CharLCD_Delay(int Count);
 void CharLCD_Test(void);
-void CharLCD_WriteData(u16 data);
-void CharLCD_WriteIndex(u16 index);
-void CharLCD_Backlight(u16 status);
+void CharLCD_WriteData(u8 data);
+void CharLCD_WriteIndex(u8 index);
+void CharLCD_Backlight(u8 status);
 
-u16 CharLCD_ReadData(void);
-u16 CharLCD_ReadRegister(u16 index);
+u8 CharLCD_ReadData(void);
+u8 CharLCD_ReadRegister(u8 index);
 
 #endif // endif for __CHARLCD_H__

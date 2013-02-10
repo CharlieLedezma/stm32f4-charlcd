@@ -38,6 +38,7 @@ void CharLCD_Config(void)
 
 void CharLCD_Init(void)
 {
+	CharLCD_WriteData(0x00);
 	Set_RS;
 	Set_RW;
 	Set_Clk;
@@ -48,56 +49,14 @@ void CharLCD_Init(void)
 	Clr_RW;
 	Clr_Clk;
 
-	Set_Clk;
-
-	CharLCD_Delay(0xFFFFF);			// Long delay to see if it helps
-
-	// 8-bit, 2-line (4-line displays use 2-line with more characters
-	// per line)
+	// 8-bit, 2-line (4-line displays use 2-lines with more characters per line)
 	CharLCD_WriteData(0x38);
-
-	CharLCD_Delay(0xFFFFFF);			// Long delay to see if it helps
-
-	Clr_Clk;
-
-	CharLCD_Delay(0xFFFFFF);
-
-	Set_Clk;
-
-	CharLCD_Delay(0xFFFFF);
-
-	// increment left, no screen shift
-	CharLCD_WriteData(0x06);
-
-	CharLCD_Delay(0xFFFFFF);
-
-	Clr_Clk;
-
 	// Turn display on, with cursor on and blinking
 	CharLCD_WriteData(0x0F);
 
-	Set_Clk;
-
-	CharLCD_Delay(0xFFFFF);
-
-	GPIO_SetBits(GPIOE,GPIO_Pin_4);
-
-	CharLCD_Delay(0xFFFFFF);
-
-	Clr_Clk;
-
-	CharLCD_Delay(0xFFFFFF);
-
-	GPIO_ResetBits(GPIOE,GPIO_Pin_4);
-
-	Set_Clk;
-
-	CharLCD_Delay(0xFFFFFF);
-
-	Clr_Clk;
-
-	// Clear the pins (just in case)
-	CharLCD_WriteData(0x00);
+	CharLCD_Clear();
+	// increment left, no screen shift
+	CharLCD_WriteData(0x06);
 }
 
 /*
@@ -119,12 +78,12 @@ void CharLCD_Init(void)
  *     ____________/           \__________
  *
  */
-void CharLCD_WriteRegister(u16 index,u16 data)
+void CharLCD_WriteRegister(u8 index,u8 data)
 {
 
 }
 
-void CharLCD_SetCursor(u16 line,u16 column)
+void CharLCD_SetCursor(u8 line,u8 column)
 {
 
 }
@@ -146,27 +105,37 @@ void CharLCD_Test(void)
 
 }
 
-void CharLCD_WriteData(u16 data)
+void CharLCD_WriteData(u8 data)
 {
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F) | (data << 4));
+
+	Set_Clk;
+
+	CharLCD_Delay(0xFFFFFF);
+
+	Clr_Clk;
+
+	CharLCD_Delay(0xFFFFFF);
+
+	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
 }
 
-void CharLCD_WriteIndex(u16 index)
+void CharLCD_WriteIndex(u8 index)
 {
 
 }
 
-void CharLCD_Backlight(u16 status)
+void CharLCD_Backlight(u8 status)
 {
 
 }
 /*
-u16 CharLCD_ReadData(void)
+u8 CharLCD_ReadData(void)
 {
 
 }
 
-u16 CharLCD_ReadRegister(u16 index)
+u8 CharLCD_ReadRegister(u8 index)
 {
 
 }
