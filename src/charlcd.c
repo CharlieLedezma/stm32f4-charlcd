@@ -122,11 +122,13 @@ void CharLCD_SetCursor(u8 line,u8 column)
 			break;
 	}
 
-	CharLCD_WriteData(0xFF & (position | 0x80));
+	CharLCD_WriteData(position | 0x80);
 }
 
 void CharLCD_Clear(void)
 {
+	Clr_RS;
+	Clr_RW;
 	CharLCD_WriteData(0x01);
 }
 
@@ -155,11 +157,6 @@ void CharLCD_WriteData(u8 data)
 	CharLCD_Delay(0xFFFF);
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
-}
-
-void CharLCD_WriteIndex(u8 index)
-{
-
 }
 
 void CharLCD_Backlight(u8 status)

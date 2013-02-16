@@ -34,7 +34,6 @@ void CharLCD_Clear(void);
 void CharLCD_Delay(int Count);
 void CharLCD_Test(void);
 void CharLCD_WriteData(u8 data);
-void CharLCD_WriteIndex(u8 index);
 void CharLCD_Backlight(u8 status);
 
 u8 CharLCD_ReadData(void);
