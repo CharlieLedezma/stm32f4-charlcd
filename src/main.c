@@ -48,18 +48,22 @@ int main(void)
   while (1)
   {
 		GPIO_SetBits(GPIOD,GPIO_Pin_12);	// Turn on green
+		CharLCD_SetCursor(1,3);
     
 		delay(0xFFFFF); 
 		
 		GPIO_SetBits(GPIOD,GPIO_Pin_13);	// Turn on orange 
+		CharLCD_SetCursor(2,0x0A);
 		
 		delay(0xFFFFF); 
 		
 		GPIO_SetBits(GPIOD,GPIO_Pin_14);	// Turn on red 
+		CharLCD_SetCursor(3,15);
 		
 		delay(0xFFFFF); 
 		
 		GPIO_SetBits(GPIOD,GPIO_Pin_15);	// Turn on blue 
+		CharLCD_SetCursor(4,20);
 		
 		delay(0xFFFFF); 
 		

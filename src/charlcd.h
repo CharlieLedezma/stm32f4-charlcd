@@ -25,6 +25,9 @@
 
 void CharLCD_Config(void);
 void CharLCD_Init(void);
+void CharLCD_WriteStringWrap(const char* string);
+void CharLCD_WriteStringNoWrap(const char* string);
+void CharLCD_WriteLine(const char* line[21]);
 void CharLCD_WriteRegister(u8 index,u8 data);
 void CharLCD_SetCursor(u8 line,u8 column);
 void CharLCD_Clear(void);

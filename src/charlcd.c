@@ -50,13 +50,34 @@ void CharLCD_Init(void)
 	Clr_Clk;
 
 	// 8-bit, 2-line (4-line displays use 2-lines with more characters per line)
-	CharLCD_WriteData(0x38);
+	if(Num_Lines > 1)
+	{
+		CharLCD_WriteData(0x38);
+	}else if(Num_Lines == 1)
+	{
+		CharLCD_WriteData(0x30);
+	}
 	// Turn display on, with cursor on and blinking
 	CharLCD_WriteData(0x0F);
 
 	CharLCD_Clear();
 	// increment left, no screen shift
 	CharLCD_WriteData(0x06);
+}
+
+void CharLCD_WriteStringWrap(const char* string) 
+{
+
+}
+
+void CharLCD_WriteStringNoWrap(const char* string) 
+{
+	
+}
+
+void CharLCD_WriteLine(const char* line[21]) 
+{
+
 }
 
 /*
@@ -78,14 +99,30 @@ void CharLCD_Init(void)
  *     ____________/           \__________
  *
  */
-void CharLCD_WriteRegister(u8 index,u8 data)
-{
-
-}
-
 void CharLCD_SetCursor(u8 line,u8 column)
 {
+	Clr_RS;
+	Clr_RW;
+	u8 position;
+	
+	switch(line) {
+		case 1:
+			position = column - 0x01;
+			break;
+		case 2:
+			position = column + 0x3F;
+			break;
+		case 3:
+			position = column + 0x13;
+			break;
+		case 4:
+			position = column + 0x53;
+			break;
+		default:
+			break;
+	}
 
+	CharLCD_WriteData(0xFF & (position | 0x80));
 }
 
 void CharLCD_Clear(void)
