@@ -27,9 +27,9 @@ extern u8 CharLCD_line,CharLCD_column;
 
 void CharLCD_Config(void);
 void CharLCD_Init(void);
-void CharLCD_WriteStringWrap(const char* string);
-void CharLCD_WriteStringNoWrap(const char* string);
-void CharLCD_WriteLine(const char* line);
+void CharLCD_WriteLineWrap(const char* string);
+void CharLCD_WriteLineNoWrap(const char* string);
+void CharLCD_WriteString(const char* line);
 void CharLCD_SetCursor(u8 line,u8 column);
 void CharLCD_Clear(void);
 void CharLCD_Delay(int Count);

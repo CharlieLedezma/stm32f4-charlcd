@@ -67,40 +67,44 @@ void CharLCD_Init(void)
 	CharLCD_WriteData(0x06);
 }
 
-void CharLCD_WriteStringWrap(const char* string) 
+void CharLCD_WriteLineWrap(const char* string) 
 {
 	char line[(Num_Characters + 1)];
 
 	u8 i,j,k;
 	k = 0;
 	for(j = CharLCD_line;j <= Num_Lines;j++){
-		for(i = CharLCD_column;(k+1 < sizeof(&string) && i < Num_Characters);i++){
+		for(i = CharLCD_column;(k+1 < 12 && i < Num_Characters);i++){
 			line[i] = string[k];
 			k++;
 		}
-		CharLCD_WriteLine(line);
+		CharLCD_WriteString(line);
 		CharLCD_SetCursor(j+1,0);
 	}
 }
 
-void CharLCD_WriteStringNoWrap(const char* string) 
+void CharLCD_WriteLineNoWrap(const char* string) 
 {
 	char line[(Num_Characters + 1)];
 
 	u8 i;
-	for(i = CharLCD_column;(i < sizeof(&string) && i < Num_Characters);i++){
-		line[i] = string[i];
+	for(i = (CharLCD_column - 1);i < Num_Characters;i++){
+		if(string[i] == '\0' || !string[i]){
+			line[i] = ' ';
+		}else {
+			line[i] = string[i];
+		}
 	}
 
-	CharLCD_WriteLine(line);
+	CharLCD_WriteString(line);
 }
 
-void CharLCD_WriteLine(const char* line) 
+void CharLCD_WriteString(const char* line) 
 {
 	int i;
 	Set_RS;
-	for(i = 0;i < sizeof(&line);i++){
-		CharLCD_WriteData((int)&line[i]);
+	for(i = 0;i < 19;i++){
+		CharLCD_WriteData((int)line[i]);
 	}
 	Clr_RS;
 }
