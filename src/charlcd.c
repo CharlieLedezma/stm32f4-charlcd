@@ -17,7 +17,8 @@
 #include "stm32f4xx_rcc.h"
 #include "charlcd.h"
 
-u8 CharLCD_line,CharLCD_column;
+u8 CharLCD_line = 1;
+u8 CharLCD_column = 1;
 
 void CharLCD_Config(void)
 {
@@ -71,20 +72,19 @@ void CharLCD_WriteLineWrap(const char* string)
 {
 	char line[(Num_Characters + 1)];
 
-	u8 i,j,k;
+	u8 i,j,k,l;
 	k = 0;
+	l = 0;
 	for(j = CharLCD_line;j <= Num_Lines;j++){
-		for(i = CharLCD_column;(k+1 < 12 && i < Num_Characters);i++){
-			if(string[i] == '\0' || !string[i]) {
-				return;
-			}else {
-				line[i] = string[k];
-			}
-			//line[i] = string[k];
+		for(i = CharLCD_column;i <= Num_Characters;i++){
+			line[l] = string[k];
 			k++;
+			l++;
 		}
+		line[l] = '\0';
 		CharLCD_WriteString(line);
 		CharLCD_SetCursor(j+1,0);
+		l = 0;
 	}
 }
 
@@ -92,14 +92,13 @@ void CharLCD_WriteLineNoWrap(const char* string)
 {
 	char line[(Num_Characters + 1)];
 
-	u8 i;
-	for(i = (CharLCD_column - 1);i < Num_Characters;i++){
-		if(string[i] == '\0' || !string[i]){
-			return;
-		}else {
-			line[i] = string[i];
-		}
+	u8 i,j;
+	j = 0;
+	for(i = CharLCD_column;i <= Num_Characters;i++){
+		line[j] = string[j];
+		j++;
 	}
+	line[j] = '\0';
 
 	CharLCD_WriteString(line);
 }
@@ -108,7 +107,7 @@ void CharLCD_WriteString(const char* line)
 {
 	int i;
 	Set_RS;
-	for(i = 0;i < 19;i++){
+	for(i = 0;i < 80;i++){
 		if(line[i] == '\0' || !line[i]){
 			return;
 		}else {

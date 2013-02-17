@@ -46,13 +46,13 @@ int main(void)
 	SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));
 
 	CharLCD_SetCursor(1,1);
-	CharLCD_WriteString("Hello World!");
+	CharLCD_WriteLineWrap("Hello World!");
 	CharLCD_SetCursor(2,1);
-	CharLCD_WriteString("STM32F4 example by:");
+	CharLCD_WriteLineWrap("STM32F4 example by:");
 	CharLCD_SetCursor(3,1);
-	CharLCD_WriteString("Tom McLeod");
+	CharLCD_WriteLineWrap("Tom McLeod");
 	CharLCD_SetCursor(4,1);
-	CharLCD_WriteString("!@#$%^&*()");
+	CharLCD_WriteLineWrap("!@#$%^&*()");
 	//CharLCD_Test();
 
   while (1)
