@@ -17,6 +17,8 @@
 #include "stm32f4xx_rcc.h"
 #include "charlcd.h"
 
+u8 CharLCD_line,CharLCD_column;
+
 void CharLCD_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -67,17 +69,40 @@ void CharLCD_Init(void)
 
 void CharLCD_WriteStringWrap(const char* string) 
 {
+	char line[(Num_Characters + 1)];
 
+	u8 i,j,k;
+	k = 0;
+	for(j = CharLCD_line;j <= Num_Lines;j++){
+		for(i = CharLCD_column;(k+1 < sizeof(&string) && i < Num_Characters);i++){
+			line[i] = string[k];
+			k++;
+		}
+		CharLCD_WriteLine(line);
+		CharLCD_SetCursor(j+1,0);
+	}
 }
 
 void CharLCD_WriteStringNoWrap(const char* string) 
 {
-	
+	char line[(Num_Characters + 1)];
+
+	u8 i;
+	for(i = CharLCD_column;(i < sizeof(&string) && i < Num_Characters);i++){
+		line[i] = string[i];
+	}
+
+	CharLCD_WriteLine(line);
 }
 
-void CharLCD_WriteLine(const char* line[21]) 
+void CharLCD_WriteLine(const char* line) 
 {
-
+	int i;
+	Set_RS;
+	for(i = 0;i < sizeof(&line);i++){
+		CharLCD_WriteData((int)&line[i]);
+	}
+	Clr_RS;
 }
 
 /*
@@ -101,6 +126,9 @@ void CharLCD_WriteLine(const char* line[21])
  */
 void CharLCD_SetCursor(u8 line,u8 column)
 {
+	CharLCD_line = line;
+	CharLCD_column = column;
+	
 	Clr_RS;
 	Clr_RW;
 	u8 position;
@@ -161,16 +189,12 @@ void CharLCD_WriteData(u8 data)
 
 void CharLCD_Backlight(u8 status)
 {
-
+	if(status)
+	{
+		Backlight_On;
+	}else
+	{
+		Backlight_Off;
+	}
 }
-/*
-u8 CharLCD_ReadData(void)
-{
 
-}
-
-u8 CharLCD_ReadRegister(u8 index)
-{
-
-}
-*/

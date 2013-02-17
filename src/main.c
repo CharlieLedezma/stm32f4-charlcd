@@ -45,6 +45,8 @@ int main(void)
 	// some degree.
 	SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));
 
+	CharLCD_WriteLine("Hello World!");
+
   while (1)
   {
 		GPIO_SetBits(GPIOD,GPIO_Pin_12);	// Turn on green

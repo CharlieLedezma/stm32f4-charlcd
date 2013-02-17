@@ -23,20 +23,18 @@
 #define Backlight_On GPIO_SetBits(GPIOD,GPIO_Pin_10)
 #define Backlight_Off GPIO_ResetBits(GPIOD,GPIO_Pin_10)
 
+extern u8 CharLCD_line,CharLCD_column;
+
 void CharLCD_Config(void);
 void CharLCD_Init(void);
 void CharLCD_WriteStringWrap(const char* string);
 void CharLCD_WriteStringNoWrap(const char* string);
-void CharLCD_WriteLine(const char* line[21]);
-void CharLCD_WriteRegister(u8 index,u8 data);
+void CharLCD_WriteLine(const char* line);
 void CharLCD_SetCursor(u8 line,u8 column);
 void CharLCD_Clear(void);
 void CharLCD_Delay(int Count);
 void CharLCD_Test(void);
 void CharLCD_WriteData(u8 data);
 void CharLCD_Backlight(u8 status);
-
-u8 CharLCD_ReadData(void);
-u8 CharLCD_ReadRegister(u8 index);
 
 #endif // endif for __CHARLCD_H__
