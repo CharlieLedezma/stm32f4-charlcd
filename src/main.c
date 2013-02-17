@@ -45,14 +45,15 @@ int main(void)
 	// some degree.
 	SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));
 
-	CharLCD_SetCursor(1,1);
+	/*CharLCD_SetCursor(1,1);
 	CharLCD_WriteLineNoWrap("Hello World!");
 	CharLCD_SetCursor(2,1);
 	CharLCD_WriteLineNoWrap("STM32F4 example by:");
 	CharLCD_SetCursor(3,1);
 	CharLCD_WriteLineNoWrap("Tom McLeod");
 	CharLCD_SetCursor(4,1);
-	CharLCD_WriteLineNoWrap("!@#$%^&*()");
+	CharLCD_WriteLineNoWrap("!@#$%^&*()");*/
+	CharLCD_Test();
 
   while (1)
   {

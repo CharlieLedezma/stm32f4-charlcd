@@ -173,7 +173,11 @@ void CharLCD_Delay(int Count)
 
 void CharLCD_Test(void)
 {
-
+	int i;
+	Set_RS;
+	for(i = 33;i < 33+(Num_Characters*Num_Lines);i++){
+		CharLCD_WriteData(i);
+	}
 }
 
 void CharLCD_WriteData(u8 data)
