@@ -76,7 +76,7 @@ void CharLCD_WriteLineWrap(const char* string)
 	for(j = CharLCD_line;j <= Num_Lines;j++){
 		for(i = CharLCD_column;(k+1 < 12 && i < Num_Characters);i++){
 			if(string[i] == '\0' || !string[i]) {
-				line[i] = ' ';
+				return;
 			}else {
 				line[i] = string[k];
 			}
@@ -95,7 +95,7 @@ void CharLCD_WriteLineNoWrap(const char* string)
 	u8 i;
 	for(i = (CharLCD_column - 1);i < Num_Characters;i++){
 		if(string[i] == '\0' || !string[i]){
-			line[i] = ' ';
+			return;
 		}else {
 			line[i] = string[i];
 		}
