@@ -75,7 +75,12 @@ void CharLCD_WriteLineWrap(const char* string)
 	k = 0;
 	for(j = CharLCD_line;j <= Num_Lines;j++){
 		for(i = CharLCD_column;(k+1 < 12 && i < Num_Characters);i++){
-			line[i] = string[k];
+			if(string[i] == '\0' || !string[i]) {
+				line[i] = ' ';
+			}else {
+				line[i] = string[k];
+			}
+			//line[i] = string[k];
 			k++;
 		}
 		CharLCD_WriteString(line);
@@ -104,7 +109,11 @@ void CharLCD_WriteString(const char* line)
 	int i;
 	Set_RS;
 	for(i = 0;i < 19;i++){
-		CharLCD_WriteData((int)line[i]);
+		if(line[i] == '\0' || !line[i]){
+			return;
+		}else {
+			CharLCD_WriteData((int)line[i]);
+		}
 	}
 	Clr_RS;
 }
