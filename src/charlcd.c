@@ -78,12 +78,16 @@ void CharLCD_WriteLineWrap(const char* string)
 	for(j = CharLCD_line;j <= Num_Lines;j++){
 		for(i = CharLCD_column;i <= Num_Characters;i++){
 			line[l] = string[k];
+			if(line[l] == '\0') {
+				CharLCD_WriteString(line);
+				return;
+			}
 			k++;
 			l++;
 		}
 		line[l] = '\0';
 		CharLCD_WriteString(line);
-		CharLCD_SetCursor(j+1,0);
+		CharLCD_SetCursor(j+1,1);
 		l = 0;
 	}
 }
