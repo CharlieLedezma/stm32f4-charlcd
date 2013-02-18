@@ -198,11 +198,11 @@ void CharLCD_WriteData(u8 data)
 
 	Set_Clk;
 
-	CharLCD_Delay(0xFFFF);
+	CharLCD_Delay(0xFFF);
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFFF);
+	CharLCD_Delay(0xFFF);
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
 }
