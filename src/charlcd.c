@@ -66,6 +66,8 @@ void CharLCD_Init(void)
 	CharLCD_Clear();
 	// increment left, no screen shift
 	CharLCD_WriteData(0x06);
+
+	CharLCD_Delay(0xFFF);
 }
 
 void CharLCD_WriteLineWrap(const char* string) 
@@ -198,11 +200,11 @@ void CharLCD_WriteData(u8 data)
 
 	Set_Clk;
 
-	CharLCD_Delay(0xFFF);
+	CharLCD_Delay(0xFF);
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFF);
+	CharLCD_Delay(0xFF);
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
 }
