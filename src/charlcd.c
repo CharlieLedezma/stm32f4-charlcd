@@ -145,12 +145,18 @@ void CharLCD_SendCustom(CustomCharacter character)
 	for(i = 0;i < 7;i++){
 		CharLCD_WriteData(character.line[i]);
 	}
+	Clr_RS;
 
 	CharLCD_SetCursor(templine,tempcolumn);
 }
 
 void CharLCD_WriteCustom(CustomCharacter character)
 {
+	Clr_RW;
+
+	Set_RS;
+	CharLCD_WriteData(character.line - 1);
+	Clr_RS
 }
 
 /*
