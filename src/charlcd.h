@@ -25,6 +25,11 @@
 
 extern u8 CharLCD_line,CharLCD_column;
 
+typedef struct {
+	u8 ramlocation;
+	u8 line[7];
+} CustomCharacter;
+
 void CharLCD_Config(void);
 void CharLCD_Init(void);
 void CharLCD_WriteLineWrap(const char* string);
