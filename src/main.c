@@ -49,11 +49,44 @@ int main(void)
 	CharLCD_WriteLineWrap("Hello World!");
 	CharLCD_SetCursor(2,1);
 	CharLCD_WriteLineWrap("STM32F4 example by: Tom McLeod");
-	/*CharLCD_SetCursor(3,1);
-		CharLCD_WriteLineWrap("Tom McLeod");*/
+	//CharLCD_SetCursor(3,1);
+	//CharLCD_WriteLineWrap("Tom McLeod");
 	CharLCD_SetCursor(4,1);
-	CharLCD_WriteLineWrap("!@#$%^&*()");
+	//CharLCD_WriteLineWrap("!@#$%^&*()");
 	//CharLCD_Test();
+	
+	/* You have to put in the data for each custom character line by line, 
+	 * this character looks like this:
+	 * ___________
+	 * | | | | | |   0x00
+	 * | | | | | |   0x00
+	 * | |x| |x| |   0x0A (hex for 01010, 1's where you want pixels lit)
+	 * | | | | | |   0x00
+	 * |x| | | |x|   0x11
+	 * | |x|x|x| |   0x0E
+	 * | | | | | |   0x00
+	 * | | | | | |   0x00
+	 * -----------
+	 * 
+	 * a helpful editor for these can be found online here:
+	 * http://www.quinapalus.com/hd44780udg.html
+	 */
+
+	CustomCharacter smiley;
+	smiley.number = 0;
+	smiley.line[0] = 0x00;
+	smiley.line[1] = 0x00;
+	smiley.line[2] = 0x0A;
+	smiley.line[3] = 0x00;
+	smiley.line[4] = 0x11;
+	smiley.line[5] = 0x0E;
+	smiley.line[6] = 0x00;
+	smiley.line[7] = 0x00;
+	
+	CharLCD_SendCustom(&smiley);
+	CharLCD_WriteCustom(&smiley);
+
+	CharLCD_WriteLineNoWrap("<-- Custom character");
 
 	while (1)
 	{
