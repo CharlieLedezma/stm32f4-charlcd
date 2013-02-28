@@ -132,22 +132,24 @@ void CharLCD_WriteString(const char* line)
 
 void CharLCD_SendCustom(CustomCharacter character)
 {
-	Clr_RS;
-	Clr_RW;
+	if(character.number <= 7){
+		Clr_RS;
+		Clr_RW;
 
-	u8 templine = CharLCD_line;
-	u8 tempcolumn = CharLCD_column;
+		u8 templine = CharLCD_line;
+		u8 tempcolumn = CharLCD_column;
 
-	CharLCD_WriteData(0x40 | (character.number - 1));
+		CharLCD_WriteData(0x40 | (character.number));
 
-	Set_RS;
-	u8 i;
-	for(i = 0;i < 7;i++){
-		CharLCD_WriteData(character.line[i]);
-	}
-	Clr_RS;
+		Set_RS;
+		u8 i;
+		for(i = 0;i < 7;i++){
+			CharLCD_WriteData(character.line[i]);
+		}
+		Clr_RS;
 
-	CharLCD_SetCursor(templine,tempcolumn);
+		CharLCD_SetCursor(templine,tempcolumn);
+	} // else: learn more about the LCD you're using :)
 }
 
 void CharLCD_WriteCustom(CustomCharacter character)
