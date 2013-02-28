@@ -86,7 +86,7 @@ int main(void)
 	CharLCD_SendCustom(&smiley);
 	CharLCD_WriteCustom(&smiley);
 
-	CharLCD_WriteLineNoWrap("<-- Custom character");
+	CharLCD_WriteLineNoWrap("<--Custom Character");
 
 	while (1)
 	{
