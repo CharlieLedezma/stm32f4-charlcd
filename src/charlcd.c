@@ -110,6 +110,14 @@ void CharLCD_WriteLineNoWrap(const char* string)
 	CharLCD_WriteString(line);
 }
 
+/*
+ * This function will just take a string and print it directly,
+ * it does not take into account the lines or number of characters 
+ * in each line in any way. If your string input is too long it will 
+ * wrap in an odd way(or not at all) on most if not all LCD's.
+ * Consider using the helper functions above for most/all string writing,
+ * that's what they're there for.
+ */
 void CharLCD_WriteString(const char* line) 
 {
 	int i;
@@ -130,21 +138,21 @@ void CharLCD_WriteString(const char* line)
  * though they can be written and rewritten at any time.
  */
 
-void CharLCD_SendCustom(CustomCharacter character)
+void CharLCD_SendCustom(CustomCharacter *character)
 {
-	if(character.number <= 7){
+	if(character->number <= 7){
 		Clr_RS;
 		Clr_RW;
 
 		u8 templine = CharLCD_line;
 		u8 tempcolumn = CharLCD_column;
 
-		CharLCD_WriteData(0x40 | (character.number));
+		CharLCD_WriteData(0x40 | (character->number));
 
 		Set_RS;
 		u8 i;
-		for(i = 0;i < 7;i++){
-			CharLCD_WriteData(character.line[i]);
+		for(i = 0;i < 8;i++){
+			CharLCD_WriteData(character->line[i]);
 		}
 		Clr_RS;
 
@@ -152,13 +160,13 @@ void CharLCD_SendCustom(CustomCharacter character)
 	} // else: learn more about the LCD you're using :)
 }
 
-void CharLCD_WriteCustom(CustomCharacter character)
+void CharLCD_WriteCustom(CustomCharacter *character)
 {
 	Clr_RW;
 
 	Set_RS;
-	CharLCD_WriteData(character.line - 1);
-	Clr_RS
+	CharLCD_WriteData(character->number);
+	Clr_RS;
 }
 
 /*
@@ -182,9 +190,6 @@ void CharLCD_WriteCustom(CustomCharacter character)
  */
 void CharLCD_SetCursor(u8 line,u8 column)
 {
-	CharLCD_line = line;
-	CharLCD_column = column;
-	
 	Clr_RS;
 	Clr_RW;
 	u8 position;
@@ -207,6 +212,9 @@ void CharLCD_SetCursor(u8 line,u8 column)
 	}
 
 	CharLCD_WriteData(position | 0x80);
+
+	CharLCD_line = line;
+	CharLCD_column = column;
 }
 
 void CharLCD_Clear(void)
@@ -217,6 +225,7 @@ void CharLCD_Clear(void)
 
 	CharLCD_line = 1;
 	CharLCD_column = 1;
+	CharLCD_Delay(0xFFFF);
 }
 
 void CharLCD_Delay(int Count)
