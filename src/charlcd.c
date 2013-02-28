@@ -63,9 +63,12 @@ void CharLCD_Init(void)
 	// Turn display on, with cursor on and blinking
 	CharLCD_WriteData(0x0F);
 
-	CharLCD_Clear();
 	// increment left, no screen shift
 	CharLCD_WriteData(0x06);
+
+	CharLCD_Delay(0xFF);
+
+	CharLCD_Clear();
 }
 
 void CharLCD_WriteLineWrap(const char* string) 
@@ -107,6 +110,14 @@ void CharLCD_WriteLineNoWrap(const char* string)
 	CharLCD_WriteString(line);
 }
 
+/*
+ * This function will just take a string and print it directly,
+ * it does not take into account the lines or number of characters 
+ * in each line in any way. If your string input is too long it will 
+ * wrap in an odd way(or not at all) on most if not all LCD's.
+ * Consider using the helper functions above for most/all string writing,
+ * that's what they're there for.
+ */
 void CharLCD_WriteString(const char* line) 
 {
 	int i;
@@ -118,6 +129,43 @@ void CharLCD_WriteString(const char* line)
 			CharLCD_WriteData((int)line[i]);
 		}
 	}
+	Clr_RS;
+}
+
+/*
+ * First have to send the custom character's data to the CGRAM.
+ * There are 8 addresses provided for use with custom characters, 
+ * though they can be written and rewritten at any time.
+ */
+
+void CharLCD_SendCustom(CustomCharacter *character)
+{
+	if(character->number <= 7){
+		Clr_RS;
+		Clr_RW;
+
+		u8 templine = CharLCD_line;
+		u8 tempcolumn = CharLCD_column;
+
+		CharLCD_WriteData(0x40 | (character->number));
+
+		Set_RS;
+		u8 i;
+		for(i = 0;i < 8;i++){
+			CharLCD_WriteData(character->line[i]);
+		}
+		Clr_RS;
+
+		CharLCD_SetCursor(templine,tempcolumn);
+	} // else: learn more about the LCD you're using :)
+}
+
+void CharLCD_WriteCustom(CustomCharacter *character)
+{
+	Clr_RW;
+
+	Set_RS;
+	CharLCD_WriteData(character->number);
 	Clr_RS;
 }
 
@@ -142,9 +190,6 @@ void CharLCD_WriteString(const char* line)
  */
 void CharLCD_SetCursor(u8 line,u8 column)
 {
-	CharLCD_line = line;
-	CharLCD_column = column;
-	
 	Clr_RS;
 	Clr_RW;
 	u8 position;
@@ -167,6 +212,9 @@ void CharLCD_SetCursor(u8 line,u8 column)
 	}
 
 	CharLCD_WriteData(position | 0x80);
+
+	CharLCD_line = line;
+	CharLCD_column = column;
 }
 
 void CharLCD_Clear(void)
@@ -174,6 +222,10 @@ void CharLCD_Clear(void)
 	Clr_RS;
 	Clr_RW;
 	CharLCD_WriteData(0x01);
+
+	CharLCD_line = 1;
+	CharLCD_column = 1;
+	CharLCD_Delay(0xFFFF);
 }
 
 void CharLCD_Delay(int Count)
@@ -198,13 +250,15 @@ void CharLCD_WriteData(u8 data)
 
 	Set_Clk;
 
-	CharLCD_Delay(0xFFF);
+	CharLCD_Delay(0xFF);
 
 	Clr_Clk;
 
-	CharLCD_Delay(0xFFF);
+	CharLCD_Delay(0xFF);
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
+
+	CharLCD_IncrementCursorVariables();
 }
 
 void CharLCD_Backlight(u8 status)
@@ -215,6 +269,19 @@ void CharLCD_Backlight(u8 status)
 	}else
 	{
 		Backlight_Off;
+	}
+}
+
+void CharLCD_IncrementCursorVariables(void)
+{
+	if((CharLCD_column + 1) <= Num_Characters) {
+		CharLCD_column++;
+	}else if((CharLCD_line + 1) <= Num_Lines) {
+		CharLCD_line++;
+		CharLCD_column = 1;
+	}else {
+		CharLCD_line = 1;
+		CharLCD_column = 1;
 	}
 }
 

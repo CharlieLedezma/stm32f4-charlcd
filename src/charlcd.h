@@ -25,16 +25,24 @@
 
 extern u8 CharLCD_line,CharLCD_column;
 
+typedef struct {
+	u8 number;
+	u8 line[8];
+} CustomCharacter;
+
 void CharLCD_Config(void);
 void CharLCD_Init(void);
 void CharLCD_WriteLineWrap(const char* string);
 void CharLCD_WriteLineNoWrap(const char* string);
 void CharLCD_WriteString(const char* line);
+void CharLCD_SendCustom(CustomCharacter *character);
+void CharLCD_WriteCustom(CustomCharacter *character);
 void CharLCD_SetCursor(u8 line,u8 column);
 void CharLCD_Clear(void);
 void CharLCD_Delay(int Count);
 void CharLCD_Test(void);
 void CharLCD_WriteData(u8 data);
 void CharLCD_Backlight(u8 status);
+void CharLCD_IncrementCursorVariables(void);
 
 #endif // endif for __CHARLCD_H__
