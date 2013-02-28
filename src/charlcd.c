@@ -20,6 +20,7 @@
 u8 CharLCD_line = 1;
 u8 CharLCD_column = 1;
 
+// Configures the gpio pins and clocks on the microcontroller
 void CharLCD_Config(void)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
@@ -39,6 +40,7 @@ void CharLCD_Config(void)
 	GPIO_Init(GPIOD,&GPIO_InitStructure);
 }
 
+// Initializes the LCD itself
 void CharLCD_Init(void)
 {
 	CharLCD_WriteData(0x00);
@@ -71,6 +73,13 @@ void CharLCD_Init(void)
 	CharLCD_Clear();
 }
 
+/* 
+ * Takes a string and will print it to the LCD, if the string would 
+ * go over the total number of characters in a line this function will 
+ * wrap it around to the NEXT line (note that normally it will skip 
+ * a line due to the layout of the DDRAM in relation to the lines on 
+ * the LCD. Particularly useful for 2-4 line LCD's
+ */
 void CharLCD_WriteLineWrap(const char* string) 
 {
 	char line[(Num_Characters + 1)];
@@ -95,6 +104,12 @@ void CharLCD_WriteLineWrap(const char* string)
 	}
 }
 
+/* 
+ * This will take an input string and send as much of it to the LCD
+ * as is required to fill up the rest of the current line, it will not 
+ * extend to the next line, just truncate as soon as it hits the end of 
+ * the current.
+ */
 void CharLCD_WriteLineNoWrap(const char* string) 
 {
 	char line[(Num_Characters + 1)];
@@ -137,7 +152,6 @@ void CharLCD_WriteString(const char* line)
  * There are 8 addresses provided for use with custom characters, 
  * though they can be written and rewritten at any time.
  */
-
 void CharLCD_SendCustom(CustomCharacter *character)
 {
 	if(character->number <= 7){
@@ -160,6 +174,9 @@ void CharLCD_SendCustom(CustomCharacter *character)
 	} // else: learn more about the LCD you're using :)
 }
 
+/*
+ * Writes a custom character to the screen
+ */
 void CharLCD_WriteCustom(CustomCharacter *character)
 {
 	Clr_RW;
@@ -169,25 +186,6 @@ void CharLCD_WriteCustom(CustomCharacter *character)
 	Clr_RS;
 }
 
-/*
- * Host write timing diagram:
- *     ------\ /-----------------\ /------
- * RS (low if X writing register, X high if not)
- *     ______/ \_________________/ \______
- *
- *     ------\                    /-------
- * R/W        \                  /
- *             \________________/
- *
- *             /-------\          /-------
- * E          /  175ns  \        /
- *     ______/           \______/
- *
- *                   /-------\
- * DB0-DB7          /         \
- *     ____________/           \__________
- *
- */
 void CharLCD_SetCursor(u8 line,u8 column)
 {
 	Clr_RS;
@@ -244,6 +242,25 @@ void CharLCD_Test(void)
 	}
 }
 
+/*
+ * Host write timing diagram:
+ *     ------\ /-----------------\ /------
+ * RS (low if X writing register, X high if not)
+ *     ______/ \_________________/ \______
+ *
+ *     ------\                    /-------
+ * R/W        \                  /
+ *             \________________/
+ *
+ *             /-------\          /-------
+ * E          /  175ns  \        /
+ *     ______/           \______/
+ *
+ *                   /-------\
+ * DB0-DB7          /         \
+ *     ____________/           \__________
+ *
+ */
 void CharLCD_WriteData(u8 data)
 {
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F) | (data << 4));
