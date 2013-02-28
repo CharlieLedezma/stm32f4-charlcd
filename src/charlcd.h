@@ -26,7 +26,7 @@
 extern u8 CharLCD_line,CharLCD_column;
 
 typedef struct {
-	u8 ramlocation;
+	u8 number;
 	u8 line[7];
 } CustomCharacter;
 
@@ -41,5 +41,6 @@ void CharLCD_Delay(int Count);
 void CharLCD_Test(void);
 void CharLCD_WriteData(u8 data);
 void CharLCD_Backlight(u8 status);
+void CharLCD_IncrementCursorVariables(void);
 
 #endif // endif for __CHARLCD_H__

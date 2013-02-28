@@ -63,11 +63,12 @@ void CharLCD_Init(void)
 	// Turn display on, with cursor on and blinking
 	CharLCD_WriteData(0x0F);
 
-	CharLCD_Clear();
 	// increment left, no screen shift
 	CharLCD_WriteData(0x06);
 
-	CharLCD_Delay(0xFFF);
+	CharLCD_Delay(0xFF);
+
+	CharLCD_Clear();
 }
 
 void CharLCD_WriteLineWrap(const char* string) 
@@ -124,6 +125,27 @@ void CharLCD_WriteString(const char* line)
 }
 
 /*
+ * First have to send the custom character's data to the CGRAM.
+ * There are 8 addresses provided for use with custom characters, 
+ * though they can be written and rewritten at any time.
+ */
+
+void CharLCD_SendCustom(CustomCharacter character)
+{
+	Clr_RS;
+	Clr_RW;
+
+	CharLCD_WriteData(0x40 | (character.number - 1));
+
+	u8 i;
+}
+
+void CharLCD_WriteCustom(CustomCharacter character)
+{
+
+}
+
+/*
  * Host write timing diagram:
  *     ------\ /-----------------\ /------
  * RS (low if X writing register, X high if not)
@@ -176,6 +198,9 @@ void CharLCD_Clear(void)
 	Clr_RS;
 	Clr_RW;
 	CharLCD_WriteData(0x01);
+
+	CharLCD_line = 1;
+	CharLCD_column = 1;
 }
 
 void CharLCD_Delay(int Count)
@@ -207,6 +232,8 @@ void CharLCD_WriteData(u8 data)
 	CharLCD_Delay(0xFF);
 
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F));
+
+	CharLCD_IncrementCursorVariables();
 }
 
 void CharLCD_Backlight(u8 status)
@@ -217,6 +244,19 @@ void CharLCD_Backlight(u8 status)
 	}else
 	{
 		Backlight_Off;
+	}
+}
+
+void CharLCD_IncrementCursorVariables(void)
+{
+	if((CharLCD_column + 1) <= Num_Characters) {
+		CharLCD_column++;
+	}else if((CharLCD_line + 1) <= Num_Lines) {
+		CharLCD_line++;
+		CharLCD_column = 1;
+	}else {
+		CharLCD_line = 1;
+		CharLCD_column = 1;
 	}
 }
 
