@@ -46,13 +46,13 @@ void CharLCD_Init(void)
 	CharLCD_WriteData(0x00);
 	Set_RS;
 	Set_RW;
-	Set_Clk;
+	Set_En;
 
 	CharLCD_Delay(0xFFFF);
 
 	Clr_RS;
 	Clr_RW;
-	Clr_Clk;
+	Clr_En;
 
 	// 8-bit, 2-line (4-line displays use 2-lines with more characters per line)
 	if(Num_Lines > 1)
@@ -223,7 +223,7 @@ void CharLCD_Clear(void)
 
 	CharLCD_line = 1;
 	CharLCD_column = 1;
-	CharLCD_Delay(0xFFFF);
+	CharLCD_Delay(0xFFF);
 }
 
 void CharLCD_Delay(int Count)
@@ -265,11 +265,11 @@ void CharLCD_WriteData(u8 data)
 {
 	GPIOE->ODR=((GPIOE->ODR & 0xF00F) | (data << 4));
 
-	Set_Clk;
+	Set_En;
 
 	CharLCD_Delay(0xFF);
 
-	Clr_Clk;
+	Clr_En;
 
 	CharLCD_Delay(0xFF);
 
